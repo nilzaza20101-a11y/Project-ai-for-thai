@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> แปลภาษาจีน → ไทย / 中译泰 - Thai-China AI</title>
+    <link rel="shortcut icon" href="/static/images/flag.png"type="image/png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --bg: #fdf8f2;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --error: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Kanit', 'Noto Sans SC', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 15% 15%, rgba(30, 58, 138, 0.08) 0px, transparent 50%),
+                radial-gradient(at 85% 85%, rgba(229, 57, 53, 0.06) 0px, transparent 50%);
+            color: var(--text);
+            margin: 0;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 860px;
+            background: var(--card);
+            border-radius: 26px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        header {
+            background: linear-gradient(135deg, #2563eb, #1e3a8a);
+            color: white;
+            padding: 30px 30px 28px;
+            position: relative;
+            text-align: center;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 24px;
+            top: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateX(-3px);
+        }
+
+        header h1 {
+            font-family: 'Itim', 'Noto Sans SC', cursive;
+            margin: 8px 0 6px 0;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 300;
+            opacity: 0.92;
+            line-height: 1.5;
+        }
+
+        .content {
+            padding: 32px 36px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+
+        label span {
+            font-weight: 400;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 165px;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            font-size: 1.1rem;
+            resize: vertical;
+            outline: none;
+            background: #f8fafc;
+            transition: all 0.25s ease;
+        }
+
+        textarea:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .meta-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 22px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .sample-btn {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 7px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .sample-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2563eb, #1e3a8a);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Itim', 'Noto Sans SC', cursive;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(30, 58, 138, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #94a3b8;
+            box-shadow: none;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            margin-top: 26px;
+            padding: 22px;
+            background: #f8faff;
+            border: 2px solid #bfdbfe;
+            border-radius: 16px;
+            display: none;
+        }
+
+        .result-title {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+        }
+
+        .translated-text {
+            font-size: 1.25rem;
+            line-height: 1.65;
+            color: var(--text);
+            white-space: pre-wrap;
+        }
+
+        .error-msg {
+            color: var(--error);
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 14px;
+            border-radius: 12px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 18px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .back-btn { position: static; display: inline-block; margin-bottom: 12px; }
+            header h1 { font-size: 1.6rem; }
+            .content { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="menu.html" class="back-btn">← กลับเมนู / 返回主菜单</a>
+        <h1>🇨🇳 2. แปลภาษาจีน → ไทย (中译泰)</h1>
+        <p>ระบบผู้ช่วยแปลข้อความภาษาจีนเป็นภาษาไทย • 中文转泰语智能翻译系统</p>
+    </header>
+
+    <div class="content">
+        <label for="zh-input">ข้อความภาษาจีน <span>/ 请输入中文文本 (สูงสุด 5,000 ตัวอักษร)</span>:</label>
+        <textarea id="zh-input" maxlength="5000" placeholder="พิมพ์หรือวางข้อความภาษาจีนที่นี่... / 请在此输入或粘贴中文..." oninput="updateCharCount('zh-input', 'char-count-zh')"></textarea>
+        
+        <div class="meta-bar">
+            <button type="button" class="sample-btn" onclick="fillSampleZh()">✨ ใส่ข้อความตัวอย่าง / 填入示例</button>
+            <span id="char-count-zh">0 / 5,000 ตัวอักษร (字)</span>
+        </div>
+
+        <button id="btn-translate-zh" class="btn-primary" onclick="translateZhToTh()">แปลเป็นภาษาไทย • 翻译成泰语</button>
+
+        <div id="loader-zh" class="loader">กำลังประมวลผลคำแปล... / 正在翻译中...</div>
+        <div id="error-zh" class="error-msg"></div>
+
+        <div id="result-zh" class="result-box">
+            <div class="result-title">
+                <span>ผลลัพธ์คำแปลภาษาไทย / 泰语翻译结果:</span>
+                <button type="button" class="sample-btn" onclick="copyText('th-output')">📋 คัดลอก / 复制</button>
+            </div>
+            <div id="th-output" class="translated-text"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateCharCount(inputId, countId) {
+        const len = document.getElementById(inputId).value.length;
+        document.getElementById(countId).innerText = `${len.toLocaleString()} / 5,000 ตัวอักษร (字)`;
+    }
+
+    function fillSampleZh() {
+        document.getElementById('zh-input').value = "请问集合地点在哪里？我们几点出发？";
+        updateCharCount('zh-input', 'char-count-zh');
+    }
+
+    function copyText(elementId) {
+        const text = document.getElementById(elementId).innerText;
+        navigator.clipboard.writeText(text);
+        alert("คัดลอกคำแปลเรียบร้อยแล้ว / 已复制翻译结果");
+    }
+
+    async function translateZhToTh() {
+        const text = document.getElementById('zh-input').value.trim();
+        const errorBox = document.getElementById('error-zh');
+        const resultBox = document.getElementById('result-zh');
+        const loader = document.getElementById('loader-zh');
+        const btn = document.getElementById('btn-translate-zh');
+
+        errorBox.style.display = 'none';
+        resultBox.style.display = 'none';
+
+        if (!text) {
+            errorBox.innerText = "กรุณากรอกข้อความภาษาจีนก่อนกดแปลภาษา / 请先输入中文文本";
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        loader.style.display = 'block';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('/api/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            });
+            const data = await response.json();
+
+            if (!response.ok || data.error) {
+                throw new Error(data.error || "เกิดข้อผิดพลาดในการแปลภาษา");
+            }
+
+            document.getElementById('th-output').innerText = data.output || JSON.stringify(data);
+            resultBox.style.display = 'block';
+        } catch (err) {
+            errorBox.innerText = err.message;
+            errorBox.style.display = 'block';
+        } finally {
+            loader.style.display = 'none';
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
