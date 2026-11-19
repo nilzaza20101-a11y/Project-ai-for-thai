@@ -2,7 +2,7 @@ import os
 import json
 import requests
 import io 
-from PIL import Image
+from PIL import Image, ImageOps
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 
@@ -123,8 +123,11 @@ def human_detect():
         'img_export': 'true'
     }
 
-    img = Image.open(file.stream).convert("RGB")
+    img = Image.open(file.stream)
+    img = ImageOps.exif_transpose(img).convert("RGB")
     img.thumbnail((1024, 1024))
+    resized_w, resized_h = img.size
+
     img_byte_arr = io.BytesIO()
     img.save(img_byte_arr, format='JPEG', quality=85)
     img_byte_arr.seek(0)
@@ -136,7 +139,10 @@ def human_detect():
     try:
         response = requests.post(url, files=files, headers=headers, data=data, timeout=60)
         response.raise_for_status()
-        return jsonify(response.json())
+        res_data = response.json()
+        res_data['resized_width'] = resized_w
+        res_data['resized_height'] = resized_h
+        return jsonify(res_data)
     except requests.exceptions.RequestException as e:
         return jsonify({'error': f'เชื่อมต่อ API ตรวจจับบุคคลไม่สำเร็จ: {str(e)}'}), 500
 
