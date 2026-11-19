@@ -1,6 +1,8 @@
 import os
 import json
 import requests
+import io 
+from PIL import Image
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 
@@ -120,12 +122,18 @@ def human_detect():
         'json_export': 'true',
         'img_export': 'true'
     }
+   img = Image.open(file.stream).convert("RGB")
+    img.thumbnail((1024, 1024))
+    img_byte_arr = io.BytesIO()
+    img.save(img_byte_arr, format='JPEG', quality=85)
+    img_byte_arr.seek(0)
+
     files = {
-        'src_img': (file.filename, file.stream, file.content_type)
+        'src_img': ('image.jpg', img_byte_arr, 'image/jpeg')
     }
 
     try:
-        response = requests.post(url, files=files, headers=headers, data=data, timeout=20)
+        response = requests.post(url, files=files, headers=headers, data=data, timeout=60)
         response.raise_for_status()
         return jsonify(response.json())
     except requests.exceptions.RequestException as e:
