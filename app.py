@@ -122,7 +122,8 @@ def human_detect():
         'json_export': 'true',
         'img_export': 'true'
     }
-   img = Image.open(file.stream).convert("RGB")
+
+    img = Image.open(file.stream).convert("RGB")
     img.thumbnail((1024, 1024))
     img_byte_arr = io.BytesIO()
     img.save(img_byte_arr, format='JPEG', quality=85)
