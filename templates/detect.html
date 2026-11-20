@@ -290,7 +290,7 @@
         reader.readAsDataURL(file);
     }
 
-    function drawBoundingBoxes(boxes) {
+    function drawBoundingBoxes(boxes, resizedWidth, resizedHeight) {
         const img = document.getElementById('img-preview');
         const canvas = document.getElementById('result-canvas');
         const ctx = canvas.getContext('2d');
@@ -299,15 +299,18 @@
         canvas.height = img.naturalHeight;
         ctx.drawImage(img, 0, 0);
 
+        const scaleX = resizedWidth ? (canvas.width / resizedWidth) : 1;
+        const scaleY = resizedHeight ? (canvas.height / resizedHeight) : 1;
+
         const lineWidth = Math.max(3, Math.round(canvas.width / 200));
         const fontSize = Math.max(16, Math.round(canvas.width / 42));
         ctx.font = `bold ${fontSize}px Kanit, Noto Sans SC, sans-serif`;
 
         boxes.forEach((box, index) => {
-            const x = box.x0;
-            const y = box.y0;
-            const width = box.x1 - box.x0;
-            const height = box.y1 - box.y0;
+            const x = box.x0 * scaleX;
+            const y = box.y0 * scaleY;
+            const width = (box.x1 - box.x0) * scaleX;
+            const height = (box.y1 - box.y0) * scaleY;
 
             ctx.strokeStyle = '#10b981';
             ctx.lineWidth = lineWidth;
@@ -363,7 +366,7 @@
 
             const detectedList = Array.isArray(data.json_data) ? data.json_data : [];
             document.getElementById('detect-count-badge').innerText = `พบทั้งหมด ${detectedList.length} คน (共检测到 ${detectedList.length} 人)`;
-            drawBoundingBoxes(detectedList);
+            drawBoundingBoxes(detectedList, data.resized_width, data.resized_height);
 
             document.getElementById('json-output').innerText = JSON.stringify(data, null, 2);
             resultBox.style.display = 'block';
