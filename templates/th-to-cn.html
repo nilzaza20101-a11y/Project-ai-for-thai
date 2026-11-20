@@ -52,22 +52,22 @@
         header {
             background: linear-gradient(135deg, #ef4444, #b91c1c);
             color: white;
-            padding: 30px 30px 28px;
+            padding: 64px 30px 28px;
             position: relative;
             text-align: center;
         }
 
         .back-btn {
             position: absolute;
-            left: 24px;
-            top: 24px;
+            left: 20px;
+            top: 18px;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(4px);
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 12px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 400;
             transition: all 0.25s ease;
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -135,10 +135,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 10px;
             margin-bottom: 22px;
             font-size: 0.9rem;
             color: var(--muted);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .sample-btn {
@@ -149,11 +157,28 @@
             cursor: pointer;
             font-size: 0.88rem;
             color: var(--text);
+            white-space: nowrap;
             transition: all 0.2s;
         }
 
         .sample-btn:hover {
             background: #e2e8f0;
+        }
+
+        .reset-btn {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 7px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: #dc2626;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #fee2e2;
         }
 
         .btn-primary {
@@ -232,6 +257,23 @@
             .back-btn { position: static; display: inline-block; margin-bottom: 12px; }
             header h1 { font-size: 1.6rem; }
             .content { padding: 24px 20px; }
+
+            .meta-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .btn-group {
+                width: 100%;
+            }
+            .btn-group .sample-btn,
+            .btn-group .reset-btn {
+                flex: 1;
+                text-align: center;
+            }
+            #char-count-th {
+                align-self: flex-start;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -249,7 +291,10 @@
         <textarea id="th-input" maxlength="5000" placeholder="พิมพ์หรือวางข้อความภาษาไทยที่ต้องการสื่อสารกับลูกทัวร์... / 在此输入泰语..." oninput="updateCharCount('th-input', 'char-count-th')"></textarea>
         
         <div class="meta-bar">
-            <button type="button" class="sample-btn" onclick="fillSampleTh()">✨ ใส่ข้อความตัวอย่าง / 填入示例</button>
+            <div class="btn-group">
+                <button type="button" class="sample-btn" onclick="fillSampleTh()">✨ ใส่ข้อความตัวอย่าง / 填入示例</button>
+                <button type="button" class="reset-btn" onclick="resetThInput()">🗑️ ล้างข้อความ / 清空</button>
+            </div>
             <span id="char-count-th">0 / 5,000 ตัวอักษร (字)</span>
         </div>
 
@@ -277,6 +322,15 @@
     function fillSampleTh() {
         document.getElementById('th-input').value = "สวัสดีครับ ยินดีต้อนรับสู่ประเทศไทย กรุณารวมตัวกันที่จุดนัดพบเวลา 10 โมงเช้าครับ";
         updateCharCount('th-input', 'char-count-th');
+    }
+
+    function resetThInput() {
+        const input = document.getElementById('th-input');
+        input.value = "";
+        updateCharCount('th-input', 'char-count-th');
+        document.getElementById('result-th').style.display = 'none';
+        document.getElementById('error-th').style.display = 'none';
+        input.focus();
     }
 
     function copyText(elementId) {

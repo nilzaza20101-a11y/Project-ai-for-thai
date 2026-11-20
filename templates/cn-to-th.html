@@ -52,22 +52,22 @@
         header {
             background: linear-gradient(135deg, #2563eb, #1e3a8a);
             color: white;
-            padding: 30px 30px 28px;
+            padding: 64px 30px 28px;
             position: relative;
             text-align: center;
         }
 
         .back-btn {
             position: absolute;
-            left: 24px;
-            top: 24px;
+            left: 20px;
+            top: 18px;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(4px);
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 12px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 400;
             transition: all 0.25s ease;
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -135,10 +135,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 10px;
             margin-bottom: 22px;
             font-size: 0.9rem;
             color: var(--muted);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .sample-btn {
@@ -149,11 +157,28 @@
             cursor: pointer;
             font-size: 0.88rem;
             color: var(--text);
+            white-space: nowrap;
             transition: all 0.2s;
         }
 
         .sample-btn:hover {
             background: #e2e8f0;
+        }
+
+        .reset-btn {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 7px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: #dc2626;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #fee2e2;
         }
 
         .btn-primary {
@@ -230,6 +255,23 @@
             .back-btn { position: static; display: inline-block; margin-bottom: 12px; }
             header h1 { font-size: 1.6rem; }
             .content { padding: 24px 20px; }
+
+            .meta-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .btn-group {
+                width: 100%;
+            }
+            .btn-group .sample-btn,
+            .btn-group .reset-btn {
+                flex: 1;
+                text-align: center;
+            }
+            #char-count-zh {
+                align-self: flex-start;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -238,7 +280,7 @@
 <div class="container">
     <header>
         <a href="menu.html" class="back-btn">← กลับเมนู / 返回主菜单</a>
-        <h1>🇨🇳 2. แปลภาษาจีน → ไทย (中译泰)</h1>
+        <h1>🇨🇳 แปลภาษาจีน → ไทย (中译泰)</h1>
         <p>ระบบผู้ช่วยแปลข้อความภาษาจีนเป็นภาษาไทย • 中文转泰语智能翻译系统</p>
     </header>
 
@@ -247,7 +289,10 @@
         <textarea id="zh-input" maxlength="5000" placeholder="พิมพ์หรือวางข้อความภาษาจีนที่นี่... / 请在此输入或粘贴中文..." oninput="updateCharCount('zh-input', 'char-count-zh')"></textarea>
         
         <div class="meta-bar">
-            <button type="button" class="sample-btn" onclick="fillSampleZh()">✨ ใส่ข้อความตัวอย่าง / 填入示例</button>
+            <div class="btn-group">
+                <button type="button" class="sample-btn" onclick="fillSampleZh()">✨ ใส่ข้อความตัวอย่าง / 填入示例</button>
+                <button type="button" class="reset-btn" onclick="resetZhInput()">🗑️ ล้างข้อความ / 清空</button>
+            </div>
             <span id="char-count-zh">0 / 5,000 ตัวอักษร (字)</span>
         </div>
 
@@ -275,6 +320,15 @@
     function fillSampleZh() {
         document.getElementById('zh-input').value = "请问集合地点在哪里？我们几点出发？";
         updateCharCount('zh-input', 'char-count-zh');
+    }
+
+    function resetZhInput() {
+        const input = document.getElementById('zh-input');
+        input.value = "";
+        updateCharCount('zh-input', 'char-count-zh');
+        document.getElementById('result-zh').style.display = 'none';
+        document.getElementById('error-zh').style.display = 'none';
+        input.focus();
     }
 
     function copyText(elementId) {

@@ -18,14 +18,15 @@
             height: 100%;
             overflow: hidden; /* ป้องกันไม่ให้เกิดแถบเลื่อน (Scrollbar) */
             font-family: sans-serif;
+            background-color: #ffffff; /* สีพื้นหลังส่วนที่เหลือกรณีรูปไม่เต็มสัดส่วนจอ (เปลี่ยนเป็นสีธีมเว็บได้) */
         }
 
         /* จัดรูปพื้นหลังให้เต็มหน้าจอพอดี */
         .splash-screen {
-            width: 100vw;
-            height: 100vh;
-            background-image: url('/static/images/thai-chaina.png'); /* แก้ตรงบรรทัดนี้ */
-            background-size: cover;
+            width: 100%;
+            height: 100dvh; /* ใช้ dvh แทน vh เพื่อไม่ให้เลยขอบบน-ล่างในเบราว์เซอร์มือถือ */
+            background-image: url('/static/images/thai-chaina.png');
+            background-size: contain; /* เปลี่ยนจาก cover เป็น contain เพื่อให้เห็นรูปครบ 100% */
             background-position: center;
             background-repeat: no-repeat;
             display: flex;
